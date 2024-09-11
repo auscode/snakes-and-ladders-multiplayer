@@ -150,6 +150,16 @@ body {
   right: 20%;
   bottom: 16%;
 }
+#restart-btn2 {
+  background-color: rgb(255, 0, 0);
+  font-size: larger;
+  padding: 0.5em;
+  border-radius: 10px;
+  margin: 1em;
+}
+#restart-btn2:hover {
+  background-color: rgb(245, 0, 0);
+}
 
 #players-table img {
   height: 40px;
