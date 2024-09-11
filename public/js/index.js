@@ -117,6 +117,7 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   function rollDice() {
+    console.log("ROLLED");
     const number = Math.ceil(Math.random() * 6);
     return number;
   }
