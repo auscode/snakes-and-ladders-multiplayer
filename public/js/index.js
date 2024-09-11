@@ -1,7 +1,7 @@
 document.addEventListener("DOMContentLoaded", () => {
   // Making Connection
-  const socket = io.connect("http://localhost:3000");
-  // const socket = io.connect(window.location.origin);
+  // const socket = io.connect("http://localhost:3000");
+  const socket = io.connect(window.location.origin);
   // const socket = io.connect(process.env.);
   socket.emit("joined");
 
