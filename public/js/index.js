@@ -1,10 +1,8 @@
 document.addEventListener("DOMContentLoaded", () => {
   // Making Connection
-  // const socket = io.connect("http://localhost:3000");
+  const socket = io.connect("http://localhost:3000");
   // const socket = io.connect(window.location.origin);
-  const socket = io.connect(
-    "https://snakes-and-ladders-multiplayer-azure.vercel.app/"
-  );
+  // const socket = io.connect(process.env.);
   socket.emit("joined");
 
   let players = []; // All players in the game
