@@ -6,6 +6,7 @@
 
 body {
   background: #1f1a25;
+  margin: 2em;
 }
 
 .board {
@@ -30,15 +31,46 @@ body {
   z-index: 1;
 }
 
-.dice {
+.player-piece-img {
+  width: 40px; /* Default size */
+  height: auto; /* Maintain aspect ratio */
+}
+
+/* .dice {
   position: absolute;
   right: 25%;
   bottom: 10%;
+  display: flex;
+  align-items: center;
+} */
+.dice {
+  margin-top: 22em;
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: flex-end;
+  /* gap: 1rem; Space between the flex items */ /* Allows wrapping for responsiveness */
+  padding-right: 8rem;
+}
+
+/* Ensures that divs inside the dice container are appropriately sized 
+.div-dice1,
+.div-dice2 {
+  flex: 1; Makes both divs take equal space 
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  width: ;
+  } */
+.div-dice2 {
+  width: 10em;
 }
 
 .dice img {
   width: 70%;
   height: auto;
+  max-width: 20em;
 }
 
 .draw-border {
@@ -98,9 +130,11 @@ body {
 }
 
 #roll-button {
-  position: absolute;
+  /* position: absolute;
   right: 18%;
-  bottom: 16%;
+  bottom: 16%; */
+  /* margin: 1em; */
+  font-size: 1rem;
 }
 
 .form-input {
@@ -108,9 +142,6 @@ body {
   color: #333;
   font-size: 1.3rem;
   padding: 1.5rem 2rem;
-  position: absolute;
-  top: 10%;
-  right: 19%;
   border-radius: 0.4rem;
   background-color: rgb(240, 233, 233);
   border: none;
@@ -120,9 +151,10 @@ body {
 }
 
 #start-btn {
-  position: absolute;
+  /* position: absolute;
   top: 11%;
-  right: 8%;
+  right: 8%; */
+  margin: 1em;
   font-size: 1rem;
 }
 
@@ -136,19 +168,21 @@ body {
 }
 
 #current-player {
-  position: absolute;
+  /* position: absolute;
   bottom: 35%;
-  right: 25%;
+  right: 25%; */
   color: azure;
   font-size: 1.4rem;
   font-family: "Roboto Slab", sans-serif;
   text-align: center;
+  margin-bottom: 1em;
+  height: 2.5em;
 }
 
 #restart-btn {
-  position: absolute;
+  /* position: absolute;
   right: 20%;
-  bottom: 16%;
+  bottom: 16%; */
 }
 #restart-btn2 {
   background-color: rgb(255, 0, 0);
@@ -160,6 +194,12 @@ body {
 #restart-btn2:hover {
   background-color: rgb(245, 0, 0);
 }
+.restart-btn-div {
+  display: flex;
+  justify-content: flex-end; /* Aligns the button to the right */
+  align-items: center; /* Centers items vertically */
+  margin-bottom: 2em;
+}
 
 #players-table img {
   height: 40px;
@@ -168,4 +208,113 @@ body {
 
 #players-table td {
   padding-right: 20px;
+}
+
+.info-box {
+  border-width: 2em;
+  border-color: aliceblue;
+}
+
+.responsive-label {
+  font-size: 2rem; /* Default size, similar to h3 */
+}
+
+@media (max-width: 1024px) {
+  .responsive-label {
+    font-size: 1.125rem; /* Size for medium screens, similar to h4 */
+  }
+  .dice img {
+    width: 30%; /* Adjust for tablets and small laptops */
+  }
+  .dice {
+    margin-top: 10em;
+    margin-left: 0em;
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: flex-end;
+    padding-right: 0;
+    /* padding-top: 20px; */
+  }
+  .div-dice2 {
+    width: 7em;
+  }
+  #current-player {
+    color: azure;
+    font-size: smaller;
+    font-family: "Roboto Slab", sans-serif;
+    text-align: center;
+    margin-bottom: 0.2em;
+    margin-top: 2.25em;
+  }
+  #players-table img {
+    height: 30px;
+    width: 20px;
+    font-size: xx-small;
+  }
+  #players-table {
+    height: 30px;
+    width: 20px;
+    font-size: x-small;
+  }
+  .form-input {
+    font-family: "Roboto", sans-serif;
+    color: #333;
+    font-size: medium;
+    padding: 1rem 1rem;
+    border-radius: 0.4rem;
+    background-color: rgb(240, 233, 233);
+    border: none;
+    width: 20%;
+    display: block;
+    transition: all 0.5s;
+  }
+  .btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font: 700 medium "Roboto Slab", sans-serif;
+  }
+  .btn:focus {
+    outline: 2px dotted #55d7dc;
+  }
+  #start-btn {
+    font-size: medium;
+    margin: 0 0.5em 0 0.5em;
+  }
+  #restart-btn2 {
+    background-color: rgb(255, 0, 0);
+    font-size: medium;
+    padding: 0.75em;
+    border-radius: 10px;
+    margin: 0.25em;
+  }
+  .player-piece-img {
+    width: 10px;
+    height: 10px;
+  }
+}
+
+@media (max-width: 768px) {
+  .responsive-label {
+    font-size: 1rem; /* Size for small screens, similar to h5 */
+  }
+  .dice img {
+    width: 25%; /* Adjust for mobile devices */
+  }
+  .player-piece-img {
+    width: 25px; /* Adjust size for small screens */
+  }
+}
+
+@media (max-width: 480px) {
+  .responsive-label {
+    font-size: 0.875rem; /* Size for extra small screens, similar to h6 */
+  }
+  .dice img {
+    width: 40%; /* Further reduce size for very small devices */
+  }
+  .player-piece-img {
+    width: 20px; /* Adjust size for extra small screens */
+  }
 }

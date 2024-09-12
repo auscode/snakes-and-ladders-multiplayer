@@ -100,6 +100,7 @@ document.addEventListener("DOMContentLoaded", () => {
       pos: 0,
       img: images[players.length],
     });
+    console.log(players.length + " players");
   });
 
   socket.on("playerStatus", (data) => {
@@ -113,11 +114,14 @@ document.addEventListener("DOMContentLoaded", () => {
       );
       document.getElementById("start-btn").hidden = true;
       document.getElementById("roll-button").hidden = false;
+      document.getElementById("restart-btn2").hidden = false;
     } else {
       document.getElementById("start-btn").hidden = true;
       document.getElementById("roll-button").hidden = true;
-      document.getElementById("current-player").innerText =
-        "You are watching the game.";
+      document.getElementById(
+        "current-player"
+      ).innerHTML = `Max Player Limit Achieved<br>You can now spectate.😍😍`;
+      document.getElementById("restart-btn2").hidden = true;
     }
   });
 
@@ -146,8 +150,15 @@ document.addEventListener("DOMContentLoaded", () => {
     drawPins();
     document.getElementById(
       "players-table"
-    ).innerHTML += `<tr><td>${data.name}</td><td><img src=${data.img} height=50 width=40></td></tr>`;
+    ).innerHTML += `<tr><td>${data.name}</td><td><img src=${data.img} class="player-piece-img"></td></tr>`;
   });
+  // socket.on("join", (data) => {
+  //   players.push(new Player(players.length, data.name, data.pos, data.img));
+  //   drawPins();
+  //   document.getElementById(
+  //     "players-table"
+  //   ).innerHTML += `<tr><td>${data.name}</td><td><img src=${data.img} height=50 width=40></td></tr>`;
+  // });
 
   socket.on("joined", (data) => {
     data.forEach((player, index) => {
@@ -186,6 +197,7 @@ document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("restart-btn").addEventListener("click", () => {
     socket.emit("restart");
   });
+  document.getElementById("restart-btn2").hidden = true;
   document.getElementById("restart-btn2").addEventListener("click", () => {
     socket.emit("restart");
   });
