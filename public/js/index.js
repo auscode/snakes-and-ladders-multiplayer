@@ -4,6 +4,58 @@
 //   // const socket = io.connect(process.env.);
 //   socket.emit("joined");
 document.addEventListener("DOMContentLoaded", () => {
+  const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+
+  const overlay = document.getElementById("orientation-overlay");
+  if (isMobile) {
+    const fullScreenBtn = document.getElementById("full-screen-btn");
+    const landscapeMsg = document.getElementById("landscape-text");
+    const portraitMsg = document.getElementById("portrait-text");
+    // Function to check orientation and full screen
+    function checkOrientation() {
+      if (window.innerHeight > window.innerWidth) {
+        // Show overlay if in portrait mode
+        overlay.classList.add("active");
+        portraitMsg.hidden = false;
+        landscapeMsg.hidden = true;
+      } else {
+        // Hide overlay in landscape
+        overlay.classList.remove("active");
+
+        // If the user has not entered full screen, show the button
+        if (!document.fullscreenElement) {
+          fullScreenBtn.style.display = "block";
+        } else {
+          fullScreenBtn.style.display = "none";
+        }
+      }
+    }
+
+    // Add event listener to the full screen button
+    fullScreenBtn.addEventListener("click", async () => {
+      try {
+        // Request full screen
+        if (!document.fullscreenElement) {
+          console.log("click");
+          await document.documentElement.requestFullscreen();
+          fullScreenBtn.style.display = "none";
+          landscapeMsg.hidden = false;
+          portraitMsg.hidden = true;
+        }
+      } catch (err) {
+        alert(`Error attempting to enable full-screen mode: ${err.message}`);
+      }
+    });
+
+    // Listen for orientation change and screen resize
+    window.addEventListener("orientationchange", checkOrientation);
+    window.addEventListener("resize", checkOrientation);
+
+    // Initial check
+    checkOrientation();
+  } else {
+    overlay.classList.remove("active");
+  }
   // const socket = io.connect("http://localhost:3000");
   const socket = io.connect(window.location.origin);
   socket.emit("joined");
