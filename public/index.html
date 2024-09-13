@@ -10,15 +10,6 @@
 </head>
 
 <body>
-  <!-- Add this to your HTML body -->
-  <div id="orientation-overlay" class="overlay">
-    <div class="message">
-      <p id="portrait-text" hidden>Please rotate your device to landscape mode and enable full-screen mode to play the
-        game.</p>
-      <p id="landscape-text" hidden>Please rotate your device to landscape mode to play the game.</p>
-      <button id="full-screen-btn" class="btn draw-border">Go Full Screen</button>
-    </div>
-  </div>
   <div class="restart-btn-div">
     <input type="text" class="form-input" id="name" placeholder="Your name" required />
     <button class="btn draw-border" id="start-btn">Join</button>
@@ -49,6 +40,7 @@
       <button class="btn draw-border" id="restart-btn" hidden>New Game</button>
     </div>
   </div>
+  
   <script src="/socket.io/socket.io.js"></script>
   <script src="js/index.js"></script>
 </body>
