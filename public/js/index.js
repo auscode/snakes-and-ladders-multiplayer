@@ -1,8 +1,3 @@
-// document.addEventListener("DOMContentLoaded", () => {
-//   // Making Connection
-//   const socket = io.connect("http://localhost:3000");
-//   // const socket = io.connect(process.env.);
-//   socket.emit("joined");
 document.addEventListener("DOMContentLoaded", () => {
   // const socket = io.connect("http://localhost:3000");
   const socket = io.connect(window.location.origin);
@@ -66,7 +61,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
       let image = new Image();
       image.src = this.img;
-      ctx.drawImage(image, xPos, yPos, 30, 40);
+
+      const imgWidth = canvas.width / 15;
+      const imgHeight = canvas.height / 15;
+
+      ctx.drawImage(image, xPos, yPos, imgWidth, imgHeight);
     }
 
     updatePos(num) {
@@ -117,7 +116,7 @@ document.addEventListener("DOMContentLoaded", () => {
       document.getElementById("restart-btn2").hidden = false;
     } else {
       document.getElementById("start-btn").hidden = true;
-      document.getElementById("roll-button").hidden = true;
+      document.getElementById("roll-button").hidden = false;
       document.getElementById(
         "current-player"
       ).innerHTML = `Max Player Limit Achieved<br>You can now spectate.😍😍`;
