@@ -163,15 +163,20 @@ document.addEventListener("DOMContentLoaded", () => {
     </tr>`;
   });
 
-  socket.on("joined", (data) => {
-    data.forEach((player, index) => {
-      players.push(new Player(index, player.name, player.pos, player.img));
-      document.getElementById(
-        "players-table"
-      ).innerHTML += `<tr><td>${player.name}</td><td><img src=${player.img}></td></tr>`;
-    });
-    drawPins();
+socket.on("joined", (data) => {
+  data.forEach((player, index) => {
+    players.push(new Player(index, player.name, player.pos, player.img));
+
+    // Add player to the table with a unique ID for each row and display their position
+    document.getElementById("players-table").innerHTML += `
+      <tr id="player-row-${index}">
+        <td>${player.name}</td>
+        <td><img src="${player.img}" class="player-piece-img"></td>
+        <td>${player.pos + 1}</td> <!-- Display 1-based position -->
+      </tr>`;
   });
+  drawPins();
+});
 
   socket.on("rollDice", (data, turn) => {
     players[data.id].updatePos(data.num);
