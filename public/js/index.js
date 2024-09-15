@@ -155,17 +155,13 @@ document.addEventListener("DOMContentLoaded", () => {
   socket.on("join", (data) => {
     players.push(new Player(players.length, data.name, data.pos, data.img));
     drawPins();
-    document.getElementById(
-      "players-table"
-    ).innerHTML += `<tr><td>${data.name}</td><td><img src=${data.img} class="player-piece-img"></td></tr>`;
+    document.getElementById("players-table").innerHTML += `
+    <tr id="player-row-${players.length - 1}">
+      <td>${data.name}</td>
+      <td><img src="${data.img}" class="player-piece-img"></td>
+      <td>${data.pos + 1}</td>
+    </tr>`;
   });
-  // socket.on("join", (data) => {
-  //   players.push(new Player(players.length, data.name, data.pos, data.img));
-  //   drawPins();
-  //   document.getElementById(
-  //     "players-table"
-  //   ).innerHTML += `<tr><td>${data.name}</td><td><img src=${data.img} height=50 width=40></td></tr>`;
-  // });
 
   socket.on("joined", (data) => {
     data.forEach((player, index) => {
@@ -181,6 +177,12 @@ document.addEventListener("DOMContentLoaded", () => {
     players[data.id].updatePos(data.num);
     document.getElementById("dice").src = `./images/dice/dice${data.num}.png`;
     drawPins();
+     const playerRow = document.querySelector(
+       `#player-row-${data.id} td:last-child`
+     );
+     if (playerRow) {
+       playerRow.innerText = players[data.id].pos + 1; 
+     }
     if (turn !== currentPlayer.id && playerStatus === "player") {
       document.getElementById("roll-button").hidden = true;
       document.getElementById(
