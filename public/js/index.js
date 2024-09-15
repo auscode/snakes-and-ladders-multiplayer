@@ -6,6 +6,7 @@ document.addEventListener("DOMContentLoaded", () => {
   let players = [];
   let currentPlayer;
   let playerStatus = "spectator"; // Default status
+  let isFirstPlayer = false;
 
   let canvas = document.getElementById("canvas");
   canvas.width = document.documentElement.clientHeight * 0.9;
@@ -113,10 +114,17 @@ document.addEventListener("DOMContentLoaded", () => {
       );
       document.getElementById("start-btn").hidden = true;
       document.getElementById("roll-button").hidden = false;
-      document.getElementById("restart-btn2").hidden = false;
+      if (data.playerId === 0) {
+        isFirstPlayer = true;
+        document.getElementById("restart-btn2").hidden = false;
+      } else {
+        isFirstPlayer = false;
+        document.getElementById("restart-btn2").hidden = true;
+      }
+      // document.getElementById("restart-btn2").hidden = true;
     } else {
       document.getElementById("start-btn").hidden = true;
-      document.getElementById("roll-button").hidden = false;
+      document.getElementById("roll-button").hidden = true;
       document.getElementById(
         "current-player"
       ).innerHTML = `Max Player Limit Achieved<br>You can now spectate.😍😍`;
@@ -185,7 +193,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (players.some((player) => player.pos === 99)) {
       document.getElementById("roll-button").hidden = true;
       document.getElementById("dice").hidden = true;
-      document.getElementById("restart-btn").hidden = false;
+      document.getElementById("restart-btn").hidden = !isFirstPlayer;
       const winner = players.find((player) => player.pos === 99);
       document.getElementById(
         "current-player"
