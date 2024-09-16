@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game Lobby</title>
+    <link rel="stylesheet" href="css/lobby.styles.css">
+</head>
+
+<body>
+    <main class="container">
+        <div class="new-game-div">
+            <h1>Select or Create a Game</h1>
+            <input type="text" id="roomName" placeholder="Enter Game Room Name" required>
+            <button id="createRoomBtn">Create Room</button>
+            <div id="inviteLink"></div>
+        </div>
+
+        <div class="existing-rooms">
+            <h2>Join an Existing Game</h2>
+            <ul id="roomsList"></ul>
+        </div>
+    </main>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="js/lobby.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,39 @@
+* {
+  background: #2b2a2a;
+}
+
+body {
+  margin: 2em;
+  color: white;
+}
+
+.container {
+  display: flex !important;
+  align-items: space-around !important;
+  justify-content: space-around;
+  gap: 4em;
+}
+
+#createRoomBtn {
+  padding: 1em 1.5em;
+  background: #000;
+  border: solid 1px #000;
+  font-size: medium !important;
+  border-radius: 10px;
+  color: white;
+}
+#createRoomBtn:hover {
+  background-color: #111010;
+}
+input {
+  padding: 1em 1.5em;
+  background-color: wheat !important;
+  border-radius: 10px;
+  color: black;
+  font-size: medium;
+}
+
+a {
+  text-decoration: none !important;
+  color:white !important;
+}
