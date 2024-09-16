@@ -18,7 +18,7 @@ const io = socket(server);
 // Players and Spectators arrays
 let players = [];
 let spectators = [];
-
+let currentTurn = 0;
 io.on("connection", (socket) => {
   console.log("Made socket connection", socket.id);
 
@@ -29,6 +29,7 @@ io.on("connection", (socket) => {
       socket.emit("playerStatus", {
         status: "player",
         playerId: players.length - 1,
+        turn: currentTurn,
       });
       io.sockets.emit("join", data);
     } else {
@@ -44,12 +45,15 @@ io.on("connection", (socket) => {
 
   socket.on("rollDice", (data) => {
     players[data.id].pos = data.pos;
-    const turn = data.num != 6 ? (data.id + 1) % players.length : data.id;
-    io.sockets.emit("rollDice", data, turn);
+    const nextTurn =
+      data.num != 6 ? (data.id + 1) % players.length : currentTurn;
+    currentTurn = nextTurn;
+    io.sockets.emit("rollDice", data, nextTurn);
   });
 
   socket.on("restart", () => {
     players = [];
+    currentTurn = 0;
     io.sockets.emit("restart");
   });
 
@@ -57,6 +61,18 @@ io.on("connection", (socket) => {
     // Remove player or spectator from the lists on disconnect
     players = players.filter((player) => player.id !== socket.id);
     spectators = spectators.filter((spectator) => spectator !== socket.id);
+    // Adjust turn if the current player disconnected
+    if (
+      currentTurn ===
+      players.findIndex((player) => player.socketId === socket.id)
+    ) {
+      currentTurn = (currentTurn + 1) % players.length;
+      io.sockets.emit(
+        "rollDice",
+        { id: null, num: null, pos: null },
+        currentTurn
+      );
+    }
   });
 });
 
