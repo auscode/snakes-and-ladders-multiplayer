@@ -204,6 +204,13 @@ document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("restart-btn2").addEventListener("click", () => {
     socket.emit("restart");
   });
+  socket.on("maxPlayerLimitReached", () => {
+    document.getElementById(
+      "current-player"
+    ).innerHTML = `Max Player Limit Achieved<br>You can now spectate.😍😍`;
+    document.getElementById("start-btn").hidden = true;
+    document.getElementById("roll-button").hidden = true;
+  });
 
   socket.on("restart", () => {
     players = [];

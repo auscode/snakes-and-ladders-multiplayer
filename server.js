@@ -25,7 +25,7 @@ io.on("connection", (socket) => {
   socket.on("join", (data) => {
     if (players.length < 4) {
       // Add player if less than 4 players
-      players.push(data);
+      players.push({ ...data, socketId: socket.id });
       socket.emit("playerStatus", {
         status: "player",
         playerId: players.length - 1,
@@ -36,6 +36,7 @@ io.on("connection", (socket) => {
       // Add as spectator if 4 players already present
       spectators.push(socket.id);
       socket.emit("playerStatus", { status: "spectator" });
+      socket.emit("maxPlayerLimitReached"); // Inform the client that the limit is reached
     }
   });
 
