@@ -7,6 +7,7 @@ document.addEventListener("DOMContentLoaded", () => {
   let currentPlayer;
   let playerStatus = "spectator"; // Default status
   let isFirstPlayer = false;
+  let turnTimer;
 
   let canvas = document.getElementById("canvas");
   canvas.width = document.documentElement.clientHeight * 0.9;
@@ -144,6 +145,29 @@ document.addEventListener("DOMContentLoaded", () => {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     players.forEach((player) => player.draw());
   }
+  function updateTimer(timeLeft) {
+    document.getElementById(
+      "timer"
+    ).innerText = `Next roll in ${timeLeft} seconds...`;
+    if (turn !== currentPlayer.id) {
+      document.getElementById("roll-button").hidden = true;
+    }
+    document.getElementById("roll-button").hidden = false;
+  }
+
+  function handleTimerEnd() {
+    if (turn !== currentPlayer.id) {
+    document.getElementById("roll-button").hidden = false;
+    }
+  }
+
+  socket.on("timerUpdate", (data) => {
+    updateTimer(data.timeLeft);
+  });
+
+  socket.on("timerEnd", () => {
+    handleTimerEnd();
+  });
 
   socket.on("join", (data) => {
     players.push(new Player(players.length, data.name, data.pos, data.img));
