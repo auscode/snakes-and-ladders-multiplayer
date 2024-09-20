@@ -105,30 +105,23 @@ document.addEventListener("DOMContentLoaded", () => {
 
   socket.on("playerStatus", (data) => {
     playerStatus = data.status;
-    if (playerStatus === "player") {
-      currentPlayer = new Player(
-        data.playerId,
-        document.getElementById("name").value,
-        0,
-        images[data.playerId]
-      );
-      document.getElementById("start-btn").hidden = true;
+    currentPlayer = new Player(
+      data.playerId,
+      data.name,
+      0,
+      images[data.playerId]
+    );
+
+    document.getElementById("start-btn").hidden = true;
+
+    if (data.turn === data.playerId) {
       document.getElementById("roll-button").hidden = false;
-      if (data.playerId === 0) {
-        isFirstPlayer = true;
-        document.getElementById("restart-btn2").hidden = false;
-      } else {
-        isFirstPlayer = false;
-        document.getElementById("restart-btn2").hidden = true;
-      }
-      // document.getElementById("restart-btn2").hidden = true;
+      document.getElementById("current-player").innerText = "It's your turn!";
     } else {
-      document.getElementById("start-btn").hidden = true;
       document.getElementById("roll-button").hidden = true;
-      document.getElementById(
-        "current-player"
-      ).innerHTML = `Max Player Limit Achieved<br>You can now spectate.😍😍`;
-      document.getElementById("restart-btn2").hidden = true;
+      document.getElementById("current-player").innerText = `It's ${
+        players[data.turn].name
+      }'s turn`;
     }
   });
 
@@ -163,31 +156,29 @@ document.addEventListener("DOMContentLoaded", () => {
     </tr>`;
   });
 
-socket.on("joined", (data) => {
-  data.forEach((player, index) => {
-    players.push(new Player(index, player.name, player.pos, player.img));
+  socket.on("joined", (data) => {
+    data.forEach((player, index) => {
+      players.push(new Player(index, player.name, player.pos, player.img));
 
-    // Add player to the table with a unique ID for each row and display their position
-    document.getElementById("players-table").innerHTML += `
+      // Add player to the table with a unique ID for each row and display their position
+      document.getElementById("players-table").innerHTML += `
       <tr id="player-row-${index}">
         <td>${player.name}</td>
         <td><img src="${player.img}" class="player-piece-img"></td>
         <td>${player.pos + 1}</td> <!-- Display 1-based position -->
       </tr>`;
+    });
+    drawPins();
   });
-  drawPins();
-});
 
   socket.on("rollDice", (data, turn) => {
     players[data.id].updatePos(data.num);
     document.getElementById("dice").src = `./images/dice/dice${data.num}.png`;
     drawPins();
-     const playerRow = document.querySelector(
-       `#player-row-${data.id} td:last-child`
-     );
-     if (playerRow) {
-       playerRow.innerText = players[data.id].pos + 1; 
-     }
+
+    document.querySelector(`#player-row-${data.id} td:last-child`).innerText =
+      players[data.id].pos + 1;
+
     if (turn !== currentPlayer.id && playerStatus === "player") {
       document.getElementById("roll-button").hidden = true;
       document.getElementById(
@@ -195,16 +186,14 @@ socket.on("joined", (data) => {
       ).innerText = `It's ${players[turn].name}'s turn`;
     } else if (playerStatus === "player") {
       document.getElementById("roll-button").hidden = false;
-      document.getElementById("current-player").innerText = "It's your turn";
+      document.getElementById("current-player").innerText = "It's your turn!";
     }
+
     if (players.some((player) => player.pos === 99)) {
       document.getElementById("roll-button").hidden = true;
-      document.getElementById("dice").hidden = true;
-      document.getElementById("restart-btn").hidden = !isFirstPlayer;
-      const winner = players.find((player) => player.pos === 99);
-      document.getElementById(
-        "current-player"
-      ).innerText = `${winner.name} has won!`;
+      document.getElementById("current-player").innerText = `${
+        players[data.id].name
+      } wins!`;
     }
   });
 
@@ -215,8 +204,18 @@ socket.on("joined", (data) => {
   document.getElementById("restart-btn2").addEventListener("click", () => {
     socket.emit("restart");
   });
+  socket.on("maxPlayerLimitReached", () => {
+    document.getElementById(
+      "current-player"
+    ).innerHTML = `Max Player Limit Achieved<br>You can now spectate.😍😍`;
+    document.getElementById("start-btn").hidden = true;
+    document.getElementById("roll-button").hidden = true;
+  });
 
   socket.on("restart", () => {
+    players = [];
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    document.getElementById("players-table").innerHTML = "";
     window.location.reload();
   });
 });
