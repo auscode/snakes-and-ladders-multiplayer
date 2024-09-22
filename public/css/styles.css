@@ -179,11 +179,11 @@ body {
   height: 2.5em;
 }
 
-#restart-btn {
+/* #restart-btn { */
   /* position: absolute;
   right: 20%;
   bottom: 16%; */
-}
+/* } */
 #restart-btn2 {
   background-color: rgb(255, 0, 0);
   font-size: larger;
@@ -217,6 +217,9 @@ body {
 
 .responsive-label {
   font-size: 2rem; /* Default size, similar to h3 */
+}
+span {
+  color: white;
 }
 
 @media (max-width: 1024px) {

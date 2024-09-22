@@ -71,12 +71,12 @@ io.on("connection", (socket) => {
     let timerValue = duration;
 
     timerInterval = setInterval(() => {
-      io.sockets.emit("timerUpdate", { timeLeft: timerValue });
+      io.sockets.emit("timerUpdate", { timeLeft: timerValue,turn: currentTurn  });
       timerValue--;
 
       if (timerValue < 0) {
         clearInterval(timerInterval);
-        io.sockets.emit("timerEnd");
+        io.sockets.emit("timerEnd", currentTurn);
       }
     }, 1000);
   }
