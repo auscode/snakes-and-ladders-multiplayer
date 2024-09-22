@@ -27,18 +27,18 @@
 
   <div id="players-box">
     <label class="responsive-label">Players currently online:</label>
-    <br>
     <table id="players-table"></table>
   </div>
-
+  
   <div class="dice">
     <div class="div-dice1">
+      <span id="timer"></span>
       <div id="current-player"></div>
       <img src="./images/dice/dice1.png" alt="" id="dice" />
     </div>
     <div class="div-dice2">
       <button class="btn draw-border" id="roll-button" hidden>Roll</button>
-      <button class="btn draw-border" id="restart-btn" hidden>New Game</button>
+      <!--<button class="btn draw-border" id="restart-btn" hidden>New Game</button>-->
     </div>
   </div>
   <script src="/socket.io/socket.io.js"></script>

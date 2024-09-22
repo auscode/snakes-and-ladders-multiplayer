@@ -7,6 +7,7 @@ document.addEventListener("DOMContentLoaded", () => {
   let currentPlayer;
   let playerStatus = "spectator"; // Default status
   let isFirstPlayer = false;
+  let turn;
 
   let canvas = document.getElementById("canvas");
   canvas.width = document.documentElement.clientHeight * 0.9;
@@ -111,7 +112,7 @@ document.addEventListener("DOMContentLoaded", () => {
       0,
       images[data.playerId]
     );
-
+    turn = data.turn;
     document.getElementById("start-btn").hidden = true;
 
     if (data.turn === data.playerId) {
@@ -144,6 +145,64 @@ document.addEventListener("DOMContentLoaded", () => {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     players.forEach((player) => player.draw());
   }
+  // #region fxn timerupdate
+  function updateTimer(timeLeft) {
+    document.getElementById(
+      "timer"
+    ).innerText = `Next roll in ${timeLeft} seconds...`;
+    if (turn !== currentPlayer.id) {
+      console.log("turn");
+      console.log(turn);
+      console.log("currentPlayer.id");
+      console.log(currentPlayer.id);
+      document.getElementById("roll-button").hidden = true;
+      // if (timeLeft === 0){
+      //   document.getElementById("roll-button").hidden = true;
+      // }
+      // } else {
+      //   document.getElementById("roll-button").hidden = true;
+    }
+    console.log("endUpdate timer");
+  }
+
+  // #region fxn timerEnd
+  function handleTimerEnd() {
+    console.log("in handleTiemr End");
+    console.log("turn");
+    console.log(turn);
+    console.log("currentPlayer.id");
+    console.log(currentPlayer.id);
+    if (turn === currentPlayer.id) {
+      console.log("handle timer end in if");
+      document.getElementById("roll-button").hidden = false;
+    } else {
+      document.getElementById("roll-button").hidden = true;
+    }
+    console.log("end handleTiemr End");
+  }
+  // #region Socket timerupdate
+  socket.on("timerUpdate", (data) => {
+    console.log("updating");
+    console.log(data);
+    updateTimer(data.timeLeft);
+    turn = data.turn;
+
+    document.getElementById("roll-button").hidden = true;
+    // if (turn !== currentPlayer.id) {
+    //   document.getElementById("roll-button").hidden = true;
+    // } else {
+    //   document.getElementById("roll-button").hidden = false;
+    // }
+    console.log("updating ed");
+  });
+
+  // #region Socket timerEnd
+  socket.on("timerEnd", (newTurn) => {
+    console.log("end timer");
+    handleTimerEnd();
+    turn = newTurn;
+    console.log("ednde");
+  });
 
   socket.on("join", (data) => {
     players.push(new Player(players.length, data.name, data.pos, data.img));
@@ -171,11 +230,11 @@ document.addEventListener("DOMContentLoaded", () => {
     drawPins();
   });
 
-  socket.on("rollDice", (data, turn) => {
+  socket.on("rollDice", (data, newTurn) => {
     players[data.id].updatePos(data.num);
     document.getElementById("dice").src = `./images/dice/dice${data.num}.png`;
     drawPins();
-
+    turn = newTurn;
     document.querySelector(`#player-row-${data.id} td:last-child`).innerText =
       players[data.id].pos + 1;
 
@@ -196,10 +255,11 @@ document.addEventListener("DOMContentLoaded", () => {
       } wins!`;
     }
   });
-
-  document.getElementById("restart-btn").addEventListener("click", () => {
-    socket.emit("restart");
-  });
+  if (document.getElementById("restart-btn")){
+    document.getElementById("restart-btn").addEventListener("click", () => {
+      socket.emit("restart");
+    });
+  }
   document.getElementById("restart-btn2").hidden = true;
   document.getElementById("restart-btn2").addEventListener("click", () => {
     socket.emit("restart");

@@ -19,6 +19,7 @@ const io = socket(server);
 let players = [];
 let spectators = [];
 let currentTurn = 0;
+let timerInterval;
 io.on("connection", (socket) => {
   console.log("Made socket connection", socket.id);
 
@@ -45,11 +46,18 @@ io.on("connection", (socket) => {
   });
 
   socket.on("rollDice", (data) => {
-    players[data.id].pos = data.pos;
-    const nextTurn =
-      data.num != 6 ? (data.id + 1) % players.length : currentTurn;
-    currentTurn = nextTurn;
-    io.sockets.emit("rollDice", data, nextTurn);
+    if (data.id >= 0 && data.id < players.length) {
+      // Check if data.id is valid
+      players[data.id].pos = data.pos;
+      const nextTurn =
+        data.num != 6 ? (data.id + 1) % players.length : currentTurn;
+      currentTurn = nextTurn;
+      io.sockets.emit("rollDice", data, nextTurn);
+      const timerDuration = data.num === 6 ? 5 : 10; // Set timer duration based on dice roll
+      startTimer(timerDuration);
+    } else {
+      console.error(`Invalid player id: ${data.id}`);
+    }
   });
 
   socket.on("restart", () => {
@@ -57,6 +65,21 @@ io.on("connection", (socket) => {
     currentTurn = 0;
     io.sockets.emit("restart");
   });
+
+  function startTimer(duration) {
+    clearInterval(timerInterval);
+    let timerValue = duration;
+
+    timerInterval = setInterval(() => {
+      io.sockets.emit("timerUpdate", { timeLeft: timerValue,turn: currentTurn  });
+      timerValue--;
+
+      if (timerValue < 0) {
+        clearInterval(timerInterval);
+        io.sockets.emit("timerEnd", currentTurn);
+      }
+    }, 1000);
+  }
 
   socket.on("disconnect", () => {
     // Remove player or spectator from the lists on disconnect
